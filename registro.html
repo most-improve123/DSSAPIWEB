@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <script>
+        async function registrarUsuario(event) {
+            event.preventDefault(); // Evita recargar la página
+
+            let nombre = document.getElementById("nombre").value;
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+
+            // Enviar datos al servidor
+            let response = await fetch("http://localhost/Api_Empresa/registro.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nombre, email, password })
+            });
+
+            let data = await response.json();
+
+            // Mostrar mensaje de éxito o error
+            alert(data.mensaje || data.error);
+
+            // Si el registro es exitoso, redirigir a login
+            if (data.mensaje && data.mensaje === "Usuario registrado correctamente") {
+                window.location.href = "index.html"; // Redirigir al login
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Registro de Usuario</h2>
+    <form onsubmit="registrarUsuario(event)">
+        <label>Nombre:</label>
+        <input type="text" id="nombre" required>
+        <br>
+        <label>Email:</label>
+        <input type="email" id="email" required>
+        <br>
+        <label>Contraseña:</label>
+        <input type="password" id="password" required>
+        <br>
+        <button type="submit">Registrarse</button>
+    </form>
+</body>
+</html>

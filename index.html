@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autenticación</title>
+    <script>
+        async function iniciarSesion(event) {
+            event.preventDefault();
+
+            let email = document.getElementById("login_email").value;
+            let password = document.getElementById("login_password").value;
+
+            let response = await fetch("http://localhost/Api_Empresa/login.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password })
+            });
+
+            let data = await response.json();
+
+            if (data.mensaje === "Login exitoso") {
+                alert("Bienvenido " + data.usuario);
+                window.location.href = "dashboard.html"; // Redirigir al Dashboard o a la API
+            } else {
+                alert(data.error);
+            }
+        }
+
+        function irARegistro() {
+            window.location.href = "registro.html"; // Redirigir a la página de registro
+        }
+    </script>
+</head>
+<body>
+    <h2>Iniciar Sesión</h2>
+    <form onsubmit="iniciarSesion(event)">
+        <label>Email:</label>
+        <input type="email" id="login_email" required>
+        <br>
+        <label>Contraseña:</label>
+        <input type="password" id="login_password" required>
+        <br>
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <hr>
+
+    <button onclick="irARegistro()">¿No tienes cuenta? Regístrate aquí</button> <!-- Botón para redirigir al registro -->
+</body>
+</html>
